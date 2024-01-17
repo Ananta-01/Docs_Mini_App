@@ -1,8 +1,8 @@
-[**This App is Under Construction so please final version,the dev is do 9to**] 
+# [**This App is Under Construction so please final version,the dev is do 9to**] 
 
 
 
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+
 
 # Getting Started
 
