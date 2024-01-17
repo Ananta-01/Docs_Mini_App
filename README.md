@@ -1,4 +1,4 @@
-# [**This App is Under Construction so please wait for final version,the dev is do 9to5 job.**] 
+# [**This App is Under Construction so please wait for final version.**] 
 
 
 
