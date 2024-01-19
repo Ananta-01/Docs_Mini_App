@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Card, Text,Button } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const subjects = [
   { id: 1, name: 'Card 1' },
@@ -32,6 +33,7 @@ const Cards = () => (
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+         <Icon size={24} color="black" name="file-alt" />
           <Card.Content>
             <Text variant="titleLarge">Card title {subject.name}</Text>
             <Text variant="bodyMedium">Card content</Text>
