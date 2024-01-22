@@ -1,18 +1,15 @@
-import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, ScrollView } from 'react-native';
-import Cards from './Cards';
+import React, { useRef } from "react";
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, PanResponder, Animated } from 'react-native';
+import Cards from "./Cards";
 
 
 function Foreground() {
     return (
-
         <SafeAreaView style={styles.container}>
-        <ScrollView>
-        <Cards />
-        <Cards />
-        <Cards />
-        </ScrollView>
-      </SafeAreaView>
+            <ScrollView>
+                <Cards />
+            </ScrollView>
+        </SafeAreaView>
 
     );
 }
@@ -24,11 +21,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        
-       
-
     },
-
 
 });
 
