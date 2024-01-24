@@ -4,7 +4,7 @@ import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 function Background() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.innerContainer}>
+       <View style={styles.innerContainer}>
         <Text style={styles.text}>
           Docs...
         </Text>

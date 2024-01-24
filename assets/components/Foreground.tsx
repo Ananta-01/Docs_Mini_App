@@ -5,11 +5,12 @@ import Cards from "./Cards";
 
 function Foreground() {
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <Cards />
-            </ScrollView>
-        </SafeAreaView>
+        <SafeAreaView  style={styles.container}>
+        <ScrollView>
+        <Cards />
+        
+        </ScrollView>
+      </SafeAreaView>
 
     );
 }
@@ -17,11 +18,15 @@ function Foreground() {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    },
+         top: 0,
+         left: 0,
+         right: 0,
+         bottom: 0,
+         backgroundColor: 'rgba(0, 0, 0, 0.1)',
+         height : '100%',
+        
+       },
+       
 
 });
 
