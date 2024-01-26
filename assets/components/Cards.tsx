@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 function Cards() {
   const [visible, setVisible] = React.useState(false);
   const [selectedCardData, setSelectedCardData] = useState(null);
-
+  const [editInput, setEditInput] = useState(true);
   const showModal = (data: any) => {
     setSelectedCardData(data);
     setVisible(true);
@@ -115,14 +115,21 @@ function Cards() {
                     <>
                       <TouchableOpacity onPress={hideModal} style={styles.editIcon}>
                         <Icon size={24} color="black" name="times-circle" />
+
                       </TouchableOpacity>
-                      <ScrollView style={styles.scrollView}>
+                      <TouchableOpacity onPress={() => setEditInput(false)} style={styles.editIcon2}>
+
+                        <Icon size={24} color="black" name="edit" />
+                      </TouchableOpacity>
+                      {editInput ? <ScrollView style={styles.scrollView}>
+                        
                         <Text style={styles.cardTitle}>{selectedCardData.name}</Text>
                         <Text style={styles.cardText}>
                           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit totam ipsum, ipsa minima enim, repudiandae saepe placeat dolores nisi maiores molestias labore ipsam minus, nesciunt autem facere voluptates architecto veniam molestiae voluptatem blanditiis? Blanditiis quis ut, obcaecati eius reprehenderit exercitationem mollitia quisquam, rerum delectus adipisci, cupiditate incidunt soluta repudiandae suscipit error temporibus sapiente molestias aut consectetur! Recusandae perferendis vel tenetur magni, reprehenderit iste est rem nesciunt sit quod beatae velit debitis consequatur quo. Molestiae illum fugit excepturi saepe, deserunt amet debitis esse, voluptatibus consectetur, temporibus error obcaecati eos sapiente sunt nihil praesentium molestias magni minus modi fuga. Ipsum rerum repudiandae doloremque natus culpa distinctio enim vero id atque, modi dolorum repellat similique beatae, quos quae. Est officiis, saepe provident ad earum, illum ea, libero dolorem necessitatibus ut qui hic. Sapiente reprehenderit nam maxime repellendus natus nemo atque doloribus ipsum. Earum, unde fugiat. Ullam hic dolor nostrum autem! Autem deserunt explicabo, quibusdam alias atque qui ipsum! Perspiciatis ab alias deleniti corporis earum facere numquam commodi blanditiis, quis incidunt soluta odit quibusdam pariatur saepe possimus sunt eos eius provident. Perferendis magnam odit totam iure ad velit omnis quam veniam, porro adipisci earum dignissimos itaque accusamus corrupti. Incidunt cum recusandae consectetur tempore quam ullam itaque hic soluta rerum deleniti exercitationem quae doloremque praesentium et, odio veniam doloribus maiores! Consequatur culpa nulla tenetur cum nemo mollitia, repudiandae alias voluptatem beatae blanditiis cumque aut quasi, iste voluptatum explicabo odio accusamus magnam adipisci neque! Veniam rem, ab quaerat doloribus voluptate illo. Sequi mollitia voluptatibus, maiores corporis numquam animi tenetur molestiae amet vero. Quam voluptatem eum harum earum voluptatibus exercitationem doloremque sint fugiat iure ut, vero expedita similique. Dolores obcaecati incidunt beatae eligendi qui, ullam molestias enim accusamus, modi, magnam aspernatur. Quasi exercitationem harum recusandae doloribus odio fugit nemo laborum est, dicta, quibusdam magnam dolorum alias molestiae numquam voluptates ad ipsum fugiat excepturi voluptatum vitae deserunt nisi animi quis id? Et eos, commodi, at quas ullam dolores iusto modi expedita vero quibusdam animi! Dolorem, tenetur! Cumque nesciunt magni libero. Exercitationem reprehenderit incidunt nesciunt. Non ea praesentium odit ipsum in corporis, pariatur nesciunt quidem sint illum itaque odio veniam eius harum veritatis asperiores incidunt officiis ad nobis suscipit. Quo porro esse iste nisi, corrupti maiores aliquid distinctio placeat ipsum animi nam qui quas cum sequi dicta ullam deserunt pariatur rem, mollitia facere, excepturi praesentium. Error quia suscipit laborum vel nihil quasi est quisquam nemo velit accusantium! Neque esse officia, facilis quisquam magnam culpa atque nemo consectetur odit incidunt. Culpa nemo, itaque ea nobis numquam soluta praesentium, non, deserunt aperiam quis dolorem atque sapiente ipsum perferendis laudantium veritatis sunt eius incidunt sed facilis delectus exercitationem quas fugiat. Fugiat consectetur harum ea, doloremque maxime, similique provident libero deserunt possimus veniam quos reiciendis nisi, ipsam accusamus repellendus quis. Quo, non eaque tempore ullam quis veniam, et in reprehenderit blanditiis aperiam consectetur ipsa accusantium repellat. Doloribus eligendi aliquam, consequuntur excepturi laudantium molestiae nisi laborum explicabo neque aliquid ipsam quis alias sint ab soluta quasi voluptatem qui necessitatibus mollitia sequi eos officia? Dolor.
                         </Text>
 
-                      </ScrollView>
+                      </ScrollView> : <Text>Now you can edit this part OK.</Text>}
+                      
 
                     </>
                   )}
@@ -173,6 +180,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
+    zIndex: 1, // Ensure the icon appears above the ScrollView content
+  },
+  editIcon2: {
+    position: 'absolute',
+    top: 10,
+    right: 40,
     zIndex: 1, // Ensure the icon appears above the ScrollView content
   },
   scrollView: {
