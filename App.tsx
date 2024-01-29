@@ -1,20 +1,34 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Background from './assets/components/Background';
 import Foreground from './assets/components/Foreground';
 import { PaperProvider } from 'react-native-paper';
 import Cards from './assets/components/Cards';
+import { NavigationContainer } from "@react-navigation/native"
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginPage from './assets/components/LoginPage';
+
+
 
 export default function App() {
+  const Stack = createNativeStackNavigator();
   return (
+
     <PaperProvider>
-      <SafeAreaView style={styles.container}>
-        <Background />
-        <Foreground />
+      <NavigationContainer>
+        <SafeAreaView style={styles.container}>
+          <Background />
+          <Foreground />
 
-
-      </SafeAreaView>
+          {/* <Stack.Navigator  screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Login" component={LoginPage} />
+          
+          </Stack.Navigator> */}
+        </SafeAreaView>
+      </NavigationContainer>
     </PaperProvider>
+
+
   );
 }
 
