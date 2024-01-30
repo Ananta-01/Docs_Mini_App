@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,15 +6,61 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image
+  Image,
 } from 'react-native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
-
 const LoginScreen = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [badEmail, setBadEmail] = useState<Boolean>(false);
+  const [badPassword, setBadPassword] = useState<Boolean>(false);
+
+  const validate = () => {
+    let valid = true;
+    if (email == '') {
+      setBadEmail(true);
+      valid = false;
+    } else if (email != '') {
+      setBadEmail(false);
+    }
+    if (password == '') {
+      setBadPassword(true);
+      valid = false;
+    } else if (password != '') {
+      setBadPassword(false);
+    }
+    return valid;
+  };
+  const login = async () => {
+    console.log('Logging in...' , email, password);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer YOUR_TOKEN');
+    const body = {email: email, password: password};
+
+    try {
+      const res = await fetch('http://192.168.1.2:8000/api/auth/login', {
+        headers: headers,
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        console.error('Error:', res.status, res.statusText);
+        // Handle the error appropriately
+        return;
+      }
+
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle the error appropriately
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -22,25 +68,38 @@ const LoginScreen = () => {
       </View>
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
-          
           <TextInput
+            value={email}
+            onChangeText={txt => setEmail(txt)}
             placeholder="Email"
             style={styles.input}
             keyboardType="email-address"
           />
+          {badEmail && <Text style={styles.ErrorText}>Please Enter Email</Text>}
         </View>
+
         <View style={styles.inputContainer}>
-          
           <TextInput
+            value={password}
+            onChangeText={txt => setPassword(txt)}
             placeholder="Password"
             style={styles.input}
             secureTextEntry
           />
+          {badPassword && (
+            <Text style={styles.ErrorText}>Please Enter Password</Text>
+          )}
         </View>
         <TouchableOpacity style={styles.forgotPasswordButton}>
           <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => {
+            if (validate()) {
+              login();
+            }
+          }}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
         <View style={styles.orContainer}>
@@ -49,9 +108,7 @@ const LoginScreen = () => {
           <View style={styles.line} />
         </View>
         <View style={styles.socialButtonsContainer}>
-          <TouchableOpacity style={styles.socialButton}>
-            
-          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}></TouchableOpacity>
           <TouchableOpacity style={styles.socialButton}>
             {/* Social Media Icon */}
           </TouchableOpacity>
@@ -62,8 +119,7 @@ const LoginScreen = () => {
       </View>
       <View style={styles.footer}>
         <Text>
-          New to the app?{' '}
-          <Text style={styles.registerText}>Register</Text>
+          New to the app? <Text style={styles.registerText}>Register</Text>
         </Text>
       </View>
     </SafeAreaView>
@@ -163,6 +219,10 @@ const styles = StyleSheet.create({
     color: '#AD40AF',
     fontSize: 14,
     fontWeight: '700',
+  },
+  ErrorText: {
+    color: 'red',
+    fontWeight: 'bold',
   },
 });
 
