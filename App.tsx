@@ -17,13 +17,13 @@ export default function App() {
     <PaperProvider>
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
-          <Background />
-          <Foreground />
+          {/* <Background />
+          <Foreground /> */}
 
-          {/* <Stack.Navigator  screenOptions={{headerShown: false}}>
+          <Stack.Navigator  screenOptions={{headerShown: false}}>
             <Stack.Screen name="Login" component={LoginPage} />
           
-          </Stack.Navigator> */}
+          </Stack.Navigator>
         </SafeAreaView>
       </NavigationContainer>
     </PaperProvider>

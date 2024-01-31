@@ -35,31 +35,26 @@ const LoginScreen = () => {
     return valid;
   };
   const login = async () => {
-    console.log('Logging in...' , email, password);
     const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer YOUR_TOKEN');
-    const body = {email: email, password: password};
+headers.append('Content-Type', 'application/json');
+headers.append('Authorization', 'Bearer actual_token_value_here');
 
-    try {
-      const res = await fetch('http://192.168.1.2:8000/api/auth/login', {
-        headers: headers,
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
+const body = { email: email, password: password };
 
-      if (!res.ok) {
-        console.error('Error:', res.status, res.statusText);
-        // Handle the error appropriately
-        return;
-      }
+try {
+  const res = await fetch('https://docs-mini-app-server.onrender.com/api/auth/login', {
+    headers: headers,
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
 
-      const data = await res.json();
-      console.log(data);
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle the error appropriately
-    }
+  // Continue with parsing the response
+  const data = await res.json();
+  console.log('Response Data:', data);
+} catch (error) {
+  console.error('Error:', error);
+  // Handle the error appropriately
+}
   };
   return (
     <SafeAreaView style={styles.container}>
