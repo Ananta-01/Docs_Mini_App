@@ -8,12 +8,12 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from './types'; // Import the type definition for your navigation stack
 import RegisterScreen from './RegisterScreen';
+import {Button, Dialog, Portal} from 'react-native-paper';
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,16 +32,23 @@ const LoginScreen = ({
   const [badEmail, setBadEmail] = useState<Boolean>(false);
   const [badPassword, setBadPassword] = useState<Boolean>(false);
 
+  const [visible, setVisible] = React.useState(false);
+
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
   const validate = () => {
     let valid = true;
     if (email == '') {
       setBadEmail(true);
+      showDialog();
       valid = false;
     } else if (email != '') {
       setBadEmail(false);
     }
     if (password == '') {
       setBadPassword(true);
+      showDialog();
       valid = false;
     } else if (password != '') {
       setBadPassword(false);
@@ -90,7 +97,20 @@ const LoginScreen = ({
             style={styles.input}
             keyboardType="email-address"
           />
-          {badEmail && <Text style={styles.ErrorText}>Please Enter Email</Text>}
+          {badEmail && (
+            <Portal>
+              <Dialog visible={visible} onDismiss={hideDialog}>
+                <Dialog.Content>
+                  <Text variant="bodyMedium" style={styles.ErrorText}>
+                    Please Enter Email
+                  </Text>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={hideDialog}>Understood</Button>
+                </Dialog.Actions>
+              </Dialog>
+            </Portal>
+          )}
         </View>
 
         <View style={styles.inputContainer}>
@@ -102,7 +122,18 @@ const LoginScreen = ({
             secureTextEntry
           />
           {badPassword && (
-            <Text style={styles.ErrorText}>Please Enter Password</Text>
+            <Portal>
+              <Dialog visible={visible} onDismiss={hideDialog}>
+                <Dialog.Content>
+                  <Text variant="bodyMedium" style={styles.ErrorText}>
+                    Please Enter Password
+                  </Text>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={hideDialog}>Understood</Button>
+                </Dialog.Actions>
+              </Dialog>
+            </Portal>
           )}
         </View>
         <TouchableOpacity style={styles.forgotPasswordButton}>
