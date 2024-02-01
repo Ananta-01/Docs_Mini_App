@@ -11,8 +11,22 @@ import {
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from './types'; // Import the type definition for your navigation stack
+import RegisterScreen from './RegisterScreen';
 
-const LoginScreen = () => {
+type LoginScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Login'
+>;
+
+const LoginScreen = ({
+  navigation,
+  onLogin,
+}: {
+  navigation: LoginScreenNavigationProp;
+  onLogin: () => void;
+}) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [badEmail, setBadEmail] = useState<Boolean>(false);
@@ -36,25 +50,31 @@ const LoginScreen = () => {
   };
   const login = async () => {
     const headers = new Headers();
-headers.append('Content-Type', 'application/json');
-headers.append('Authorization', 'Bearer actual_token_value_here');
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer actual_token_value_here');
 
-const body = { email: email, password: password };
+    const body = {email: email, password: password};
 
-try {
-  const res = await fetch('https://docs-mini-app-server.onrender.com/api/auth/login', {
-    headers: headers,
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
+    try {
+      const res = await fetch(
+        'https://docs-mini-app-server.onrender.com/api/auth/login',
+        {
+          headers: headers,
+          method: 'POST',
+          body: JSON.stringify(body),
+        },
+      );
 
-  // Continue with parsing the response
-  const data = await res.json();
-  console.log('Response Data:', data);
-} catch (error) {
-  console.error('Error:', error);
-  // Handle the error appropriately
-}
+      // Continue with parsing the response
+      const data = await res.json();
+      console.log('Response Data:', data._id);
+      if (data._id != null) {
+        navigation.navigate('Home', {id: data.id});
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle the error appropriately
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -112,11 +132,13 @@ try {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.footer}>
+      <TouchableOpacity
+        style={styles.footer}
+        onPress={() => navigation.navigate('RegisterScreen')}>
         <Text>
           New to the app? <Text style={styles.registerText}>Register</Text>
         </Text>
-      </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

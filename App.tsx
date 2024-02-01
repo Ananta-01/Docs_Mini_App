@@ -1,34 +1,54 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import Background from './assets/components/Background';
-import Foreground from './assets/components/Foreground';
-import { PaperProvider } from 'react-native-paper';
-import Cards from './assets/components/Cards';
-import { NavigationContainer } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// App.js
+import React, {useState} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {PaperProvider} from 'react-native-paper';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginPage from './assets/components/LoginPage';
-
-
+import HomeScreen from './assets/components/HomeScreen';
+import RegisterScreen from './assets/components/RegisterScreen';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
-  return (
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  console.log('App component rendered. isLoggedIn:', isLoggedIn);
+
+  const handleLogin = () => {
+    console.log('Login successful');
+    setIsLoggedIn(true);
+  };
+
+  return (
     <PaperProvider>
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
-          {/* <Background />
-          <Foreground /> */}
-
-          <Stack.Navigator  screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Login" component={LoginPage} />
-          
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            {/* {isLoggedIn ? (
+              <Stack.Screen name="Home" component={HomeScreen} />
+            ) : (
+              <>
+                <Stack.Screen name="Login">
+                  {props => <LoginPage {...props} onLogin={handleLogin} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="RegisterScreen"
+                  component={RegisterScreen}
+                />
+              </>
+            )} */}
+            <Stack.Screen name="Login">
+                  {props => <LoginPage {...props} onLogin={handleLogin} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="RegisterScreen"
+                  component={RegisterScreen}
+                />
+            <Stack.Screen name="Home" component={HomeScreen} />
           </Stack.Navigator>
         </SafeAreaView>
       </NavigationContainer>
     </PaperProvider>
-
-
   );
 }
 
