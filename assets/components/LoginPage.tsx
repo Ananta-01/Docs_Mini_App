@@ -12,7 +12,7 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from './types'; // Import the type definition for your navigation stack
+import {RootStackParamList} from './types';
 import RegisterScreen from './RegisterScreen';
 import {Button, Dialog, Portal} from 'react-native-paper';
 
@@ -82,7 +82,7 @@ const LoginScreen = ({
       } else {
         Alert.alert('Login Failed', 'Incorrect email or password.');
       }
-    } catch (error) {
+    } catch (error: any) {
       // Handle specific authentication error
       if (error.message.includes('Unauthorized')) {
         Alert.alert(
