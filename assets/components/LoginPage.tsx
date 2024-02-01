@@ -57,22 +57,6 @@ const LoginScreen = ({
     return valid;
   };
 
-  const error = () => {
-    return (
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Content>
-            <Text variant="bodyMedium" style={styles.ErrorText}>
-              Please check your Email and Password
-            </Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Understood</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    );
-  };
   const login = async () => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
