@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -55,6 +56,23 @@ const LoginScreen = ({
     }
     return valid;
   };
+
+  const error = () => {
+    return (
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Content>
+            <Text variant="bodyMedium" style={styles.ErrorText}>
+              Please check your Email and Password
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Understood</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    );
+  };
   const login = async () => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -77,10 +95,21 @@ const LoginScreen = ({
       console.log('Response Data:', data._id);
       if (data._id != null) {
         navigation.navigate('Home', {id: data.id});
+      } else {
+        Alert.alert('Login Failed', 'Incorrect email or password.');
       }
     } catch (error) {
-      console.error('Error:', error);
-      // Handle the error appropriately
+      // Handle specific authentication error
+      if (error.message.includes('Unauthorized')) {
+        Alert.alert(
+          'Authentication Failed',
+          'Invalid credentials. Please try again.',
+        );
+      } else {
+        console.error('Error:', error);
+        // Handle other errors appropriately
+        // You can show a generic error message or take other actions
+      }
     }
   };
   return (
