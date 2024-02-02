@@ -1,12 +1,30 @@
-import React from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {Button, Dialog, Portal} from 'react-native-paper';
 
-const InputField = ({ label, icon, keyboardType = 'default', inputType = 'text' }:any) => {
+const InputField = ({
+  label,
+  icon,
+  keyboardType = 'default',
+  inputType = 'text',
+}: any) => {
   return (
     <View style={styles.inputContainer}>
-      <FeatherIcon name={icon} style={styles.inputIcon} size={20} color="#fff" />
+      <FeatherIcon
+        name={icon}
+        style={styles.inputIcon}
+        size={20}
+        color="#fff"
+      />
       <TextInput
         style={styles.input}
         placeholder={label}
@@ -18,7 +36,46 @@ const InputField = ({ label, icon, keyboardType = 'default', inputType = 'text' 
   );
 };
 
-const RegisterScreen = ({ navigation }:any) => {
+const RegisterScreen = ({navigation}: any) => {
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const [badEmail, setBadEmail] = useState<Boolean>(false);
+  const [badPassword, setBadPassword] = useState<Boolean>(false);
+  const [badName, setBadName] = useState<Boolean>(false);
+
+  const [visible, setVisible] = React.useState(false);
+
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
+  const validate = () => {
+    let valid = true;
+    if (email == '') {
+      setBadEmail(true);
+      showDialog();
+      valid = false;
+    } else if (email != '') {
+      setBadEmail(false);
+    }
+    if (password == '') {
+      setBadPassword(true);
+      showDialog();
+      valid = false;
+    } else if (password != '') {
+      setBadPassword(false);
+    }
+    if (name == '') {
+      setBadName(true);
+      showDialog();
+      valid = false;
+    } else if (name != '') {
+      setBadName(false);
+    }
+    return valid;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -26,27 +83,53 @@ const RegisterScreen = ({ navigation }:any) => {
       </View>
       <View style={styles.formContainer}>
         <InputField label="Enter your name" icon="user" />
-        <InputField label="Email" icon="mail" keyboardType="email-address" />
+        <InputField label="Email" icon="mail" keyboardType="email-address"  value={email}
+            onChangeText={txt => setEmail(txt)} />
+            {badEmail && (
+            <Portal>
+              <Dialog visible={visible} onDismiss={hideDialog}>
+                <Dialog.Content>
+                  <Text variant="bodyMedium" style={styles.ErrorText}>
+                    Please Enter Email
+                  </Text>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={hideDialog}>Understood</Button>
+                </Dialog.Actions>
+              </Dialog>
+            </Portal>
+          )}
         <InputField label="Password" icon="lock" inputType="password" />
 
-        <TouchableOpacity style={styles.registerButton}>
+        <TouchableOpacity style={styles.registerButton} 
+        onPress={() => {
+          if (validate()) {
+            // login();
+          }
+        }}
+        >
           <Text style={styles.registerButtonText}>Sign Up</Text>
         </TouchableOpacity>
 
         <View style={styles.socialButtonsContainer}>
-          <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#4267B2' }]}>
+          <TouchableOpacity
+            style={[styles.socialButton, {backgroundColor: '#4267B2'}]}>
             <FontAwesomeIcon name="facebook" size={20} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#00acee' }]}>
+          <TouchableOpacity
+            style={[styles.socialButton, {backgroundColor: '#00acee'}]}>
             <FontAwesomeIcon name="twitter" size={20} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#db4a39' }]}>
+          <TouchableOpacity
+            style={[styles.socialButton, {backgroundColor: '#db4a39'}]}>
             <FontAwesomeIcon name="google" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.footer} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.footer}
+        onPress={() => navigation.goBack()}>
         <Text>
           Already have an account? <Text style={styles.loginText}>Log In</Text>
         </Text>
@@ -126,6 +209,10 @@ const styles = StyleSheet.create({
     color: '#3498db',
     fontSize: 14,
     fontWeight: '700',
+  },
+  ErrorText: {
+    color: 'red',
+    fontWeight: 'bold',
   },
 });
 
