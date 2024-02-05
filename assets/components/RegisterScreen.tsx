@@ -83,31 +83,36 @@ const RegisterScreen = ({navigation}: any) => {
       </View>
       <View style={styles.formContainer}>
         <InputField label="Enter your name" icon="user" />
-        <InputField label="Email" icon="mail" keyboardType="email-address"  value={email}
-            onChangeText={txt => setEmail(txt)} />
-            {badEmail && (
-            <Portal>
-              <Dialog visible={visible} onDismiss={hideDialog}>
-                <Dialog.Content>
-                  <Text variant="bodyMedium" style={styles.ErrorText}>
-                    Please Enter Email
-                  </Text>
-                </Dialog.Content>
-                <Dialog.Actions>
-                  <Button onPress={hideDialog}>Understood</Button>
-                </Dialog.Actions>
-              </Dialog>
-            </Portal>
-          )}
+        <InputField
+          label="Email"
+          icon="mail"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={txt => setEmail(txt)}
+        />
+        {badEmail && (
+          <Portal>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+              <Dialog.Content>
+                <Text variant="bodyMedium" style={styles.ErrorText}>
+                  Please Enter Email
+                </Text>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={hideDialog}>Understood</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+        )}
         <InputField label="Password" icon="lock" inputType="password" />
 
-        <TouchableOpacity style={styles.registerButton} 
-        onPress={() => {
-          if (validate()) {
-            // login();
-          }
-        }}
-        >
+        <TouchableOpacity
+          style={styles.registerButton}
+          onPress={() => {
+            if (validate()) {
+              // login();
+            }
+          }}>
           <Text style={styles.registerButtonText}>Sign Up</Text>
         </TouchableOpacity>
 
