@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {Button, Dialog, Portal} from 'react-native-paper';
+import {Loader} from './Loader';
 
 const InputField = ({
   label,
@@ -46,6 +47,8 @@ const RegisterScreen = ({navigation}: any) => {
   const [password, setPassword] = useState<string>('');
   const [visibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [dialogMessage, setDialogMessage] = useState<string>('');
+  const [loading, setLoading] = useState<Boolean>(false);
+
   const validate = () => {
     if (name === '') {
       showDialog('Please Enter Name');
@@ -84,6 +87,7 @@ const RegisterScreen = ({navigation}: any) => {
   };
 
   const register = async () => {
+    setLoading(true);
     if (!validate()) {
       return; // If validation fails, do not proceed with registration
     }
@@ -105,6 +109,7 @@ const RegisterScreen = ({navigation}: any) => {
 
       // Continue with parsing the response
       const data = await res.json();
+      setLoading(false);
       console.log('Response Data:', data);
 
       if (data._id != null) {
@@ -188,6 +193,7 @@ const RegisterScreen = ({navigation}: any) => {
           Already have an account? <Text style={styles.loginText}>Log In</Text>
         </Text>
       </TouchableOpacity>
+      <Loader visible={loading} />
     </SafeAreaView>
   );
 };

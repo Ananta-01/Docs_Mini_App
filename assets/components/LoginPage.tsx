@@ -15,6 +15,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from './types';
 import RegisterScreen from './RegisterScreen';
 import {Button, Dialog, Portal} from 'react-native-paper';
+import { Loader } from './Loader';
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,6 +33,8 @@ const LoginScreen = ({
   const [password, setPassword] = useState<string>('');
   const [badEmail, setBadEmail] = useState<Boolean>(false);
   const [badPassword, setBadPassword] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(false);
+
 
   const [visible, setVisible] = React.useState(false);
 
@@ -58,6 +61,7 @@ const LoginScreen = ({
   };
 
   const login = async () => {
+    setLoading(true);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer actual_token_value_here');
@@ -76,6 +80,7 @@ const LoginScreen = ({
 
       // Continue with parsing the response
       const data = await res.json();
+      setLoading(false);
       console.log('Response Data:', data._id);
       if (data._id != null) {
         navigation.navigate('Home', {id: data.id});
@@ -183,6 +188,7 @@ const LoginScreen = ({
           New to the app? <Text style={styles.registerText}>Register</Text>
         </Text>
       </TouchableOpacity>
+      <Loader visible={loading} />
     </SafeAreaView>
   );
 };
