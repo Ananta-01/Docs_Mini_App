@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {Button, Dialog, Portal} from 'react-native-paper';
 
 const InputField = ({
@@ -16,6 +15,8 @@ const InputField = ({
   icon,
   keyboardType = 'default',
   inputType = 'text',
+  value,
+  onChangeText,
 }: any) => {
   return (
     <View style={styles.inputContainer}>
@@ -31,6 +32,8 @@ const InputField = ({
         placeholderTextColor="#ddd"
         keyboardType={keyboardType}
         secureTextEntry={inputType === 'password'}
+        value={value}
+        onChangeText={onChangeText}
       />
     </View>
   );
@@ -40,40 +43,31 @@ const RegisterScreen = ({navigation}: any) => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
-  const [badEmail, setBadEmail] = useState<Boolean>(false);
-  const [badPassword, setBadPassword] = useState<Boolean>(false);
-  const [badName, setBadName] = useState<Boolean>(false);
-
-  const [visible, setVisible] = React.useState(false);
-
-  const showDialog = () => setVisible(true);
-
-  const hideDialog = () => setVisible(false);
+  const [visibleDialog, setVisibleDialog] = useState<boolean>(false);
+  const [dialogMessage, setDialogMessage] = useState<string>('');
   const validate = () => {
-    let valid = true;
-    if (email == '') {
-      setBadEmail(true);
-      showDialog();
-      valid = false;
-    } else if (email != '') {
-      setBadEmail(false);
+    if (name === '') {
+      showDialog('Please Enter Name');
+      return false;
     }
-    if (password == '') {
-      setBadPassword(true);
-      showDialog();
-      valid = false;
-    } else if (password != '') {
-      setBadPassword(false);
+    if (email === '') {
+      showDialog('Please Enter Email');
+      return false;
     }
-    if (name == '') {
-      setBadName(true);
-      showDialog();
-      valid = false;
-    } else if (name != '') {
-      setBadName(false);
+    if (password === '') {
+      showDialog('Please Enter Password');
+      return false;
     }
-    return valid;
+    return true;
+  };
+
+  const showDialog = (message: string) => {
+    setDialogMessage(message);
+    setVisibleDialog(true);
+  };
+
+  const hideDialog = () => {
+    setVisibleDialog(false);
   };
 
   return (
@@ -82,7 +76,12 @@ const RegisterScreen = ({navigation}: any) => {
         <Text style={styles.headerText}>Create Account</Text>
       </View>
       <View style={styles.formContainer}>
-        <InputField label="Enter your name" icon="user" />
+        <InputField
+          label="Enter your name"
+          icon="user"
+          value={name}
+          onChangeText={txt => setName(txt)}
+        />
         <InputField
           label="Email"
           icon="mail"
@@ -90,12 +89,19 @@ const RegisterScreen = ({navigation}: any) => {
           value={email}
           onChangeText={txt => setEmail(txt)}
         />
-        {badEmail && (
+        <InputField
+          label="Password"
+          icon="lock"
+          inputType="password"
+          value={password}
+          onChangeText={txt => setPassword(txt)}
+        />
+        {visibleDialog && (
           <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog}>
+            <Dialog visible={visibleDialog} onDismiss={hideDialog}>
               <Dialog.Content>
                 <Text variant="bodyMedium" style={styles.ErrorText}>
-                  Please Enter Email
+                  {dialogMessage}
                 </Text>
               </Dialog.Content>
               <Dialog.Actions>
@@ -104,8 +110,6 @@ const RegisterScreen = ({navigation}: any) => {
             </Dialog>
           </Portal>
         )}
-        <InputField label="Password" icon="lock" inputType="password" />
-
         <TouchableOpacity
           style={styles.registerButton}
           onPress={() => {
@@ -117,18 +121,7 @@ const RegisterScreen = ({navigation}: any) => {
         </TouchableOpacity>
 
         <View style={styles.socialButtonsContainer}>
-          <TouchableOpacity
-            style={[styles.socialButton, {backgroundColor: '#4267B2'}]}>
-            <FontAwesomeIcon name="facebook" size={20} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.socialButton, {backgroundColor: '#00acee'}]}>
-            <FontAwesomeIcon name="twitter" size={20} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.socialButton, {backgroundColor: '#db4a39'}]}>
-            <FontAwesomeIcon name="google" size={20} color="#fff" />
-          </TouchableOpacity>
+          {/* Social buttons */}
         </View>
       </View>
 
