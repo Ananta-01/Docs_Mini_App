@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {Button, Dialog, Portal} from 'react-native-paper';
@@ -54,6 +55,10 @@ const RegisterScreen = ({navigation}: any) => {
       showDialog('Please Enter Email');
       return false;
     }
+    if (!validateEmail(email)) {
+      showDialog('Please Enter a Valid Email');
+      return false;
+    }
     if (password === '') {
       showDialog('Please Enter Password');
       return false;
@@ -70,6 +75,57 @@ const RegisterScreen = ({navigation}: any) => {
     setVisibleDialog(false);
   };
 
+  const validateEmail = (email: any) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      );
+  };
+
+  const register = async () => {
+    if (!validate()) {
+      return; // If validation fails, do not proceed with registration
+    }
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer actual_token_value_here');
+
+    const body = {name: name, email: email, password: password};
+
+    try {
+      const res = await fetch(
+        'https://docs-mini-app-server.onrender.com/api/auth/reqister',
+        {
+          headers: headers,
+          method: 'POST',
+          body: JSON.stringify(body),
+        },
+      );
+
+      // Continue with parsing the response
+      const data = await res.json();
+      console.log('Response Data:', data);
+
+      if (data._id != null) {
+        navigation.navigate('Login', {id: data.id});
+      } else if (data.error && data.error.includes('duplicate key error')) {
+        // Check if the error message indicates duplicate email
+        showDialog('Email already exists. Try a different email.');
+      } else {
+        Alert.alert('Register Failed', 'Try Different Email');
+      }
+    } catch (error: any) {
+      if (error.message.includes('Unauthorized')) {
+        Alert.alert(
+          'Authentication Failed',
+          'Invalid credentials. Please try again.',
+        );
+      } else {
+        console.error('Error:', error);
+      }
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -114,7 +170,7 @@ const RegisterScreen = ({navigation}: any) => {
           style={styles.registerButton}
           onPress={() => {
             if (validate()) {
-              // login();
+              register();
             }
           }}>
           <Text style={styles.registerButtonText}>Sign Up</Text>
