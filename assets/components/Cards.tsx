@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 
 import {
   Dimensions,
@@ -9,10 +9,10 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Modal, Portal, Card, Text, Button, TextInput } from 'react-native-paper';
+import {Modal, Portal, Card, Text, Button, TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-function Cards() {
+function Cards({userId}: any) {
   const [visible, setVisible] = React.useState(false);
   const [selectedCardData, setSelectedCardData] = useState(null);
   const [editInput, setEditInput] = useState(false);
@@ -30,17 +30,17 @@ function Cards() {
     setSelectedCardData(null);
     setVisible(false);
     setEditInput(false);
-}  
+  }
   const subjects = [
-    { id: 1, name: 'Card 1', footer: '4mb' },
-    { id: 2, name: 'Card 1', footer: '' },
-    { id: 3, name: 'Card 1', footer: '' },
+    {id: 1, name: 'Card 1', footer: '4mb'},
+    {id: 2, name: 'Card 1', footer: ''},
+    {id: 3, name: 'Card 1', footer: ''},
 
-    { id: 4, name: 'Card 1', footer: '4mb' },
+    {id: 4, name: 'Card 1', footer: '4mb'},
 
-    { id: 5, name: 'Card 1', footer: '' },
-    { id: 6, name: 'Card 1', footer: '4mb' },
-    { id: 7, name: 'Card 1', footer: '4mb' },
+    {id: 5, name: 'Card 1', footer: ''},
+    {id: 6, name: 'Card 1', footer: '4mb'},
+    {id: 7, name: 'Card 1', footer: '4mb'},
   ];
 
   const cardRefs = useRef(subjects.map(() => React.createRef()));
@@ -52,7 +52,7 @@ function Cards() {
       onPanResponderMove: Animated.event(
         [
           null,
-          { dx: panValues.current[index].x, dy: panValues.current[index].y },
+          {dx: panValues.current[index].x, dy: panValues.current[index].y},
         ],
         {
           useNativeDriver: false,
@@ -60,7 +60,7 @@ function Cards() {
       ),
       onPanResponderRelease: () => {
         Animated.spring(panValues.current[index], {
-          toValue: { x: 0, y: 0 },
+          toValue: {x: 0, y: 0},
           useNativeDriver: false,
         }).start();
       },
@@ -84,8 +84,8 @@ function Cards() {
           style={[
             {
               transform: [
-                { translateX: panValues.current[i].x },
-                { translateY: panValues.current[i].y },
+                {translateX: panValues.current[i].x},
+                {translateY: panValues.current[i].y},
               ],
             },
           ]}
@@ -103,14 +103,14 @@ function Cards() {
               position: 'relative',
             }}>
             <TouchableOpacity
-              style={{ margin: 8 }}
+              style={{margin: 8}}
               onPress={() => showModal(subject)}>
               <Icon size={24} color="white" name="file-alt" />
-              <Text variant="titleMedium" style={{ color: 'white' }}>
+              <Text variant="titleMedium" style={{color: 'white'}}>
                 Card title {subject.name}
               </Text>
-              <Text variant="labelSmall" style={{ color: 'white' }}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing.
+              <Text variant="labelSmall" style={{color: 'white'}}>
+                User ID in Card: {userId}
               </Text>
               <Portal>
                 <Modal
@@ -132,10 +132,10 @@ function Cards() {
                       {editInput ? (
                         <ScrollView style={styles.scrollView}>
                           <TextInput
-                            style={{ marginTop: 10, marginBottom: 10 }}
-                            label='Title'
+                            style={{marginTop: 10, marginBottom: 10}}
+                            label="Title"
                             value={selectedCardData.name}
-                            mode='outlined'
+                            mode="outlined"
                           />
                         </ScrollView>
                       ) : (
@@ -148,8 +148,6 @@ function Cards() {
                             elit.
                           </Text>
                         </ScrollView>
-
-
                       )}
                     </>
                   )}
@@ -169,7 +167,7 @@ function Cards() {
                   backgroundColor: '#92C7CF',
                   alignItems: 'center',
                 }}>
-                <Text style={{ fontSize: 10 }}> {subject.footer} </Text>
+                <Text style={{fontSize: 10}}> {subject.footer} </Text>
               </View>
             ) : (
               ''
@@ -191,7 +189,7 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,

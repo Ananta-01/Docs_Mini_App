@@ -3,11 +3,11 @@ import { SafeAreaView, View, Text, StyleSheet, ScrollView, PanResponder, Animate
 import Cards from "./Cards";
 
 
-function Foreground() {
+function Foreground({ userId}:any) {
     return (
         <SafeAreaView  style={styles.container}>
         <ScrollView>
-        <Cards />
+        <Cards userId={userId} />
         
         </ScrollView>
       </SafeAreaView>

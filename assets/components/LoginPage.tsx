@@ -83,7 +83,7 @@ const LoginScreen = ({
       setLoading(false);
       console.log('Response Data:', data._id);
       if (data._id != null) {
-        navigation.navigate('Home', {id: data.id});
+        navigation.navigate('Home', {id: data._id});
       } else {
         Alert.alert('Login Failed', 'Incorrect email or password.');
       }
