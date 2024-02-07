@@ -91,8 +91,10 @@ function Cards({userId}: any) {
       );
 
       const data = await res.json();
+      setNoteData(data);
       setLoading(false);
       console.log('Response Data:', data);
+      // console.log(noteData);
     } catch (error: any) {
       if (error.message.includes('Unauthorized')) {
         Alert.alert(
@@ -111,9 +113,9 @@ function Cards({userId}: any) {
         flexWrap: 'wrap',
         justifyContent: 'center',
       }}>
-      {subjects.map((subject, i) => (
+      {noteData?.map((noteData: any, i: any) => (
         <Animated.View
-          key={subject.id}
+          key={noteData.postedBy}
           style={[
             {
               transform: [
@@ -137,13 +139,13 @@ function Cards({userId}: any) {
             }}>
             <TouchableOpacity
               style={{margin: 8}}
-              onPress={() => showModal(subject)}>
+              onPress={() => showModal(noteData)}>
               <Icon size={24} color="white" name="file-alt" />
               <Text variant="titleMedium" style={{color: 'white'}}>
-                Card title {subject.name}
+                {noteData.title}
               </Text>
               <Text variant="labelSmall" style={{color: 'white'}}>
-                User ID in Card: {userId}
+                {noteData.description}
               </Text>
               <Portal>
                 <Modal
@@ -167,18 +169,25 @@ function Cards({userId}: any) {
                           <TextInput
                             style={{marginTop: 10, marginBottom: 10}}
                             label="Title"
-                            value={selectedCardData.name}
+                            value={selectedCardData.title}
+                            mode="outlined"
+                          />
+                          <TextInput
+                            multiline
+                            numberOfLines={10}
+                            style={{marginTop: 10, marginBottom: 10}}
+                            label="description"
+                            value={selectedCardData.description}
                             mode="outlined"
                           />
                         </ScrollView>
                       ) : (
                         <ScrollView style={styles.scrollView}>
                           <Text style={styles.cardTitle}>
-                            {selectedCardData.name}
+                            {selectedCardData.title}
                           </Text>
                           <Text style={styles.cardText}>
-                            Lorem ipsum dolor sit, amet consectetur adipisicing
-                            elit.
+                            {selectedCardData.description}
                           </Text>
                         </ScrollView>
                       )}
@@ -188,7 +197,7 @@ function Cards({userId}: any) {
               </Portal>
             </TouchableOpacity>
 
-            {subject.footer ? (
+            {/* {subject.footer ? (
               <View
                 style={{
                   position: 'absolute',
@@ -204,7 +213,7 @@ function Cards({userId}: any) {
               </View>
             ) : (
               ''
-            )}
+            )} */}
           </View>
         </Animated.View>
       ))}
