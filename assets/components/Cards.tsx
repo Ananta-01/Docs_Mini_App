@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {
   Dimensions,
@@ -8,14 +8,19 @@ import {
   Animated,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Modal, Portal, Card, Text, Button, TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Loader} from './Loader';
 
 function Cards({userId}: any) {
   const [visible, setVisible] = React.useState(false);
   const [selectedCardData, setSelectedCardData] = useState(null);
   const [editInput, setEditInput] = useState(false);
+  const [loading, setLoading] = useState<Boolean>(false);
+  const [noteData, setNoteData] = useState();
+
   const showModal = (data: any) => {
     setSelectedCardData(data);
     setVisible(true);
@@ -71,6 +76,34 @@ function Cards({userId}: any) {
 
   const cardWidth = (Dimensions.get('window').width - cardGap * 3) / 2;
 
+  useEffect(() => {
+    getNotes();
+  }, []);
+
+  const getNotes = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `https://docs-mini-app-server.onrender.com/api/notes/getNotes/${userId}`,
+        {
+          method: 'GET',
+        },
+      );
+
+      const data = await res.json();
+      setLoading(false);
+      console.log('Response Data:', data);
+    } catch (error: any) {
+      if (error.message.includes('Unauthorized')) {
+        Alert.alert(
+          'Authentication Failed',
+          'Invalid credentials. Please try again.',
+        );
+      } else {
+        console.error('Error:', error);
+      }
+    }
+  };
   return (
     <View
       style={{
@@ -175,6 +208,7 @@ function Cards({userId}: any) {
           </View>
         </Animated.View>
       ))}
+      <Loader visible={loading} />
     </View>
   );
 }
