@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-
 import {
   Dimensions,
   ScrollView,
@@ -36,20 +35,27 @@ function Cards({userId}: any) {
     setVisible(false);
     setEditInput(false);
   }
-  const subjects = [
-    {id: 1, name: 'Card 1', footer: '4mb'},
-    {id: 2, name: 'Card 1', footer: ''},
-    {id: 3, name: 'Card 1', footer: ''},
+  // const subjects = [
+  //   {id: 1, name: 'Card 1', footer: '4mb'},
+  //   {id: 2, name: 'Card 1', footer: ''},
+  //   {id: 3, name: 'Card 1', footer: ''},
 
-    {id: 4, name: 'Card 1', footer: '4mb'},
+  //   {id: 4, name: 'Card 1', footer: '4mb'},
 
-    {id: 5, name: 'Card 1', footer: ''},
-    {id: 6, name: 'Card 1', footer: '4mb'},
-    {id: 7, name: 'Card 1', footer: '4mb'},
-  ];
+  //   {id: 5, name: 'Card 1', footer: ''},
+  //   {id: 6, name: 'Card 1', footer: '4mb'},
+  //   {id: 7, name: 'Card 1', footer: '4mb'},
+  // ];
 
-  const cardRefs = useRef(subjects.map(() => React.createRef()));
-  const panValues = useRef(subjects.map(() => new Animated.ValueXY()));
+  // const cardRefs = useRef(noteData.map(() => React.createRef()));
+  // const panValues = useRef(noteData.map(() => new Animated.ValueXY()));
+  const cardRefs = useRef([]);
+const panValues = useRef([]);
+
+if (noteData) {
+  cardRefs.current = noteData.map(() => React.createRef());
+  panValues.current = noteData.map(() => new Animated.ValueXY());
+}
 
   const createPanResponder = (index: any) => {
     return PanResponder.create({
