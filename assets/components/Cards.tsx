@@ -124,6 +124,7 @@ if (noteData) {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
+        height: 780
       }}>
       {noteData?.map((noteData: any, i: any) => (
         <Animated.View
@@ -235,6 +236,8 @@ if (noteData) {
         </Animated.View>
       ))}
         <FAB.Group
+        fabStyle={styles.fab}
+        theme={{ colors: { accent: '#333366' } }}
           open={open}
           visible
           icon={open ? 'calendar-today' : 'plus'}
@@ -320,5 +323,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  fab: {
+    backgroundColor: '#333366"',
+   color: '#333366"'
+},
 });
 export default Cards;
