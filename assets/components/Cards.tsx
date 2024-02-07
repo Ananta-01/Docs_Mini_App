@@ -186,6 +186,11 @@ if (noteData) {
                             value={selectedCardData.description}
                             mode="outlined"
                           />
+                          <TouchableOpacity
+          style={styles.changesButton}
+         >
+          <Text style={styles.changesButtonText}>Save changes</Text>
+        </TouchableOpacity>
                         </ScrollView>
                       ) : (
                         <ScrollView style={styles.scrollView}>
@@ -267,6 +272,18 @@ const styles = StyleSheet.create({
   cardText: {
     color: 'black',
     marginBottom: 15,
+  },
+  changesButton: {
+    backgroundColor: '#265073',
+    borderRadius: 25,
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  changesButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 export default Cards;
