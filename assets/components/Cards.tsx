@@ -9,11 +9,17 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {Modal, Portal, Card, Text, Button, TextInput} from 'react-native-paper';
+import {Modal, Portal, Card, Text, Button, TextInput,FAB} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Loader} from './Loader';
 
 function Cards({userId}: any) {
+  const [state, setState] = React.useState({ open: false });
+
+  const onStateChange = ({ open }:any) => setState({ open });
+
+  const { open } = state;
+
   const [visible, setVisible] = React.useState(false);
   const [selectedCardData, setSelectedCardData] = useState(null);
   const [editInput, setEditInput] = useState(false);
@@ -228,6 +234,35 @@ if (noteData) {
           </View>
         </Animated.View>
       ))}
+        <FAB.Group
+          open={open}
+          visible
+          icon={open ? 'calendar-today' : 'plus'}
+          actions={[
+            { icon: 'plus', onPress: () => console.log('Pressed add') },
+            {
+              icon: 'star',
+              label: 'Star',
+              onPress: () => console.log('Pressed star'),
+            },
+            {
+              icon: 'email',
+              label: 'Email',
+              onPress: () => console.log('Pressed email'),
+            },
+            {
+              icon: 'bell',
+              label: 'Remind',
+              onPress: () => console.log('Pressed notifications'),
+            },
+          ]}
+          onStateChange={onStateChange}
+          onPress={() => {
+            if (open) {
+              // do something if the speed dial is open
+            }
+          }}
+        />
       <Loader visible={loading} />
     </View>
   );
