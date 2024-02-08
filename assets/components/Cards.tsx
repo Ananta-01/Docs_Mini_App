@@ -29,19 +29,25 @@ function Cards({userId}: any) {
   const {open} = state;
 
   const [visible, setVisible] = React.useState(false);
+  const [visibleAdd, setVisibleAdd] = React.useState(false);
+
   const [selectedCardData, setSelectedCardData] = useState(null);
   const [editInput, setEditInput] = useState(false);
   const [loading, setLoading] = useState<Boolean>(false);
   const [noteData, setNoteData] = useState();
 
+  const showModalAdd = () => setVisibleAdd(true);
+  const hideModalAdd = () => setVisibleAdd(false);
   const showModal = (data: any) => {
     setSelectedCardData(data);
     setVisible(true);
+    // setVisibleAdd(true);
   };
 
   const hideModal = () => {
     setSelectedCardData(null);
     setVisible(false);
+    // setVisibleAdd(false);
   };
 
   function hideModaleditInput() {
@@ -49,20 +55,7 @@ function Cards({userId}: any) {
     setVisible(false);
     setEditInput(false);
   }
-  // const subjects = [
-  //   {id: 1, name: 'Card 1', footer: '4mb'},
-  //   {id: 2, name: 'Card 1', footer: ''},
-  //   {id: 3, name: 'Card 1', footer: ''},
 
-  //   {id: 4, name: 'Card 1', footer: '4mb'},
-
-  //   {id: 5, name: 'Card 1', footer: ''},
-  //   {id: 6, name: 'Card 1', footer: '4mb'},
-  //   {id: 7, name: 'Card 1', footer: '4mb'},
-  // ];
-
-  // const cardRefs = useRef(noteData.map(() => React.createRef()));
-  // const panValues = useRef(noteData.map(() => new Animated.ValueXY()));
   const cardRefs = useRef([]);
   const panValues = useRef([]);
 
@@ -126,6 +119,7 @@ function Cards({userId}: any) {
       }
     }
   };
+  const containerStyle = {backgroundColor: 'white', padding: 20};
   return (
     <View
       style={{
@@ -210,7 +204,7 @@ function Cards({userId}: any) {
                       ) : (
                         <ScrollView style={styles.scrollView}>
                           <Text style={styles.cardTitle}>
-                            {selectedCardData.title} 
+                            {selectedCardData.title}
                           </Text>
                           <Text style={styles.cardText}>
                             {selectedCardData.description}
@@ -243,6 +237,20 @@ function Cards({userId}: any) {
           </View>
         </Animated.View>
       ))}
+      <Modal
+        visible={visibleAdd}
+        onDismiss={hideModalAdd}
+        contentContainerStyle={styles.AddnoteContanier}>
+        <TouchableOpacity onPress={hideModalAdd} style={styles.closeBtnNote}>
+          <Icon size={24} color="red" name="times-circle" />
+        </TouchableOpacity>
+
+        <ScrollView style={styles.AddNoteScrollView}>
+          <Text style={styles.AddnotecardTitle}>fghjk</Text>
+          <Text style={styles.AddnotecardText}>fgyhujik</Text>
+        </ScrollView>
+      </Modal>
+     
       <FAB.Group
         // fabStyle={styles.fab}
         theme={{colors: {background: 'rgba(33, 33, 33, 0.06)'}}}
@@ -250,7 +258,7 @@ function Cards({userId}: any) {
         visible
         icon={open ? 'note' : 'plus'}
         actions={[
-          {icon: 'plus', onPress: () => console.log('Pressed add')},
+          {icon: 'plus', onPress: () => showModalAdd('')},
           {
             icon: 'star',
             label: 'Star',
@@ -329,6 +337,38 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: '#333366"',
     color: '#333366"',
+  },
+  AddnoteContanier: {
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    padding: 20,
+    height: '80%', // Adjusted height for better visibility of the ScrollView
+    margin: 20,
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  closeBtnNote: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1, // Ensure the icon appears above the ScrollView content
+  },
+  AddNoteScrollView: {
+    marginTop: 20,
+    padding: 10,
+  },
+  AddnotecardTitle: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    marginBottom: 10,
+  },
+  AddnotecardText: {
+    color: 'black',
+    marginBottom: 15,
   },
 });
 export default Cards;
