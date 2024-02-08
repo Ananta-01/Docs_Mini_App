@@ -9,16 +9,24 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {Modal, Portal, Card, Text, Button, TextInput,FAB} from 'react-native-paper';
+import {
+  Modal,
+  Portal,
+  Card,
+  Text,
+  Button,
+  TextInput,
+  FAB,
+} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Loader} from './Loader';
 
 function Cards({userId}: any) {
-  const [state, setState] = React.useState({ open: false });
+  const [state, setState] = React.useState({open: false});
 
-  const onStateChange = ({ open }:any) => setState({ open });
+  const onStateChange = ({open}: any) => setState({open});
 
-  const { open } = state;
+  const {open} = state;
 
   const [visible, setVisible] = React.useState(false);
   const [selectedCardData, setSelectedCardData] = useState(null);
@@ -56,12 +64,12 @@ function Cards({userId}: any) {
   // const cardRefs = useRef(noteData.map(() => React.createRef()));
   // const panValues = useRef(noteData.map(() => new Animated.ValueXY()));
   const cardRefs = useRef([]);
-const panValues = useRef([]);
+  const panValues = useRef([]);
 
-if (noteData) {
-  cardRefs.current = noteData.map(() => React.createRef());
-  panValues.current = noteData.map(() => new Animated.ValueXY());
-}
+  if (noteData) {
+    cardRefs.current = noteData.map(() => React.createRef());
+    panValues.current = noteData.map(() => new Animated.ValueXY());
+  }
 
   const createPanResponder = (index: any) => {
     return PanResponder.create({
@@ -124,7 +132,7 @@ if (noteData) {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        height: 780
+        height: 780,
       }}>
       {noteData?.map((noteData: any, i: any) => (
         <Animated.View
@@ -193,16 +201,16 @@ if (noteData) {
                             value={selectedCardData.description}
                             mode="outlined"
                           />
-                          <TouchableOpacity
-          style={styles.changesButton}
-         >
-          <Text style={styles.changesButtonText}>Save changes</Text>
-        </TouchableOpacity>
+                          <TouchableOpacity style={styles.changesButton}>
+                            <Text style={styles.changesButtonText}>
+                              Save changes
+                            </Text>
+                          </TouchableOpacity>
                         </ScrollView>
                       ) : (
                         <ScrollView style={styles.scrollView}>
                           <Text style={styles.cardTitle}>
-                            {selectedCardData.title}
+                            {selectedCardData.title} 
                           </Text>
                           <Text style={styles.cardText}>
                             {selectedCardData.description}
@@ -235,37 +243,32 @@ if (noteData) {
           </View>
         </Animated.View>
       ))}
-        <FAB.Group
-        fabStyle={styles.fab}
-        theme={{ colors: { accent: '#333366' } }}
-          open={open}
-          visible
-          icon={open ? 'calendar-today' : 'plus'}
-          actions={[
-            { icon: 'plus', onPress: () => console.log('Pressed add') },
-            {
-              icon: 'star',
-              label: 'Star',
-              onPress: () => console.log('Pressed star'),
-            },
-            {
-              icon: 'email',
-              label: 'Email',
-              onPress: () => console.log('Pressed email'),
-            },
-            {
-              icon: 'bell',
-              label: 'Remind',
-              onPress: () => console.log('Pressed notifications'),
-            },
-          ]}
-          onStateChange={onStateChange}
-          onPress={() => {
-            if (open) {
-              // do something if the speed dial is open
-            }
-          }}
-        />
+      <FAB.Group
+        // fabStyle={styles.fab}
+        theme={{colors: {background: 'rgba(33, 33, 33, 0.06)'}}}
+        open={open}
+        visible
+        icon={open ? 'note' : 'plus'}
+        actions={[
+          {icon: 'plus', onPress: () => console.log('Pressed add')},
+          {
+            icon: 'star',
+            label: 'Star',
+            onPress: () => console.log('Pressed star'),
+          },
+          {
+            icon: 'bell',
+            label: 'Remind',
+            onPress: () => console.log('Pressed notifications'),
+          },
+        ]}
+        onStateChange={onStateChange}
+        onPress={() => {
+          if (open) {
+            // do something if the speed dial is open
+          }
+        }}
+      />
       <Loader visible={loading} />
     </View>
   );
@@ -325,7 +328,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     backgroundColor: '#333366"',
-   color: '#333366"'
-},
+    color: '#333366"',
+  },
 });
 export default Cards;
