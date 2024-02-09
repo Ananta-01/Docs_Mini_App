@@ -36,6 +36,8 @@ function Cards({userId}: any) {
   const [editInput, setEditInput] = useState(false);
   const [loading, setLoading] = useState<Boolean>(false);
   const [noteData, setNoteData] = useState();
+  const [noteTitle, setNoteTitle] = useState<string>('');
+  const [noteDesc, setNoteDesc] = useState<string>('');
 
   const showModalAdd = () => setVisibleAdd(true);
   const hideModalAdd = () => setVisibleAdd(false);
@@ -89,9 +91,57 @@ function Cards({userId}: any) {
   const cardGap = 16;
 
   const cardWidth = (Dimensions.get('window').width - cardGap * 3) / 2;
+  const AddNote = async () => {
+    setLoading(true);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer actual_token_value_here');
 
+    const body = {
+      title: noteTitle,
+      description: noteDesc,
+      postedBy: `${userId}`,
+    };
+
+    try {
+      const res = await fetch(
+        'https://docs-mini-app-server.onrender.com/api/notes/addNote',
+        {
+          headers: headers,
+          method: 'POST',
+          body: JSON.stringify(body),
+        },
+      );
+
+      // Continue with parsing the response
+      const data = await res.json();
+      setLoading(false);
+
+      console.log('New note Data:', data);
+      getNotes();
+
+      // if (data._id != null) {
+      //   navigation.navigate('Login', {id: data.id});
+      // } else if (data.error && data.error.includes('duplicate key error')) {
+      //   // Check if the error message indicates duplicate email
+      //   showDialog('Email already exists. Try a different email.');
+      // } else {
+      //   Alert.alert('Register Failed', 'Try Different Email');
+      // }
+    } catch (error: any) {
+      if (error.message.includes('Unauthorized')) {
+        Alert.alert(
+          'Authentication Failed',
+          'Invalid credentials. Please try again.',
+        );
+      } else {
+        console.error('Error:', error);
+      }
+    }
+  };
   useEffect(() => {
     getNotes();
+    // AddNote();
   }, []);
 
   const getNotes = async () => {
@@ -107,7 +157,7 @@ function Cards({userId}: any) {
       const data = await res.json();
       setNoteData(data);
       setLoading(false);
-      console.log('Response Data:', data);
+      // console.log('Response Data:', data);
       // console.log(noteData);
     } catch (error: any) {
       if (error.message.includes('Unauthorized')) {
@@ -120,6 +170,7 @@ function Cards({userId}: any) {
       }
     }
   };
+
   const containerStyle = {backgroundColor: 'white', padding: 20};
   return (
     <View
@@ -127,11 +178,11 @@ function Cards({userId}: any) {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        height: 780,
+        // height: 780,
       }}>
       {noteData?.map((noteData: any, i: any) => (
         <Animated.View
-          key={noteData.postedBy}
+          key={noteData._id}
           style={[
             {
               transform: [
@@ -247,30 +298,25 @@ function Cards({userId}: any) {
         </TouchableOpacity>
 
         <ScrollView style={styles.AddNoteScrollView}>
-          {/* <Text style={styles.AddnotecardTitle}>fghjk</Text> */}
-          {/* <TextInput
-            value={email}
-            onChangeText={txt => setEmail(txt)}
-            placeholder="Email"
-            style={styles.input}
-            keyboardType="email-address"
-          /> */}
-          <RNTextInput placeholder="Title" style={styles.AddnotecardTitle} />
+          <RNTextInput
+            placeholder="Title"
+            style={styles.AddnotecardTitle}
+            onChangeText={txt => setNoteTitle(txt)}
+          />
           <RNTextInput
             placeholder="Description"
             style={styles.AddnotecardText}
             multiline={true}
+            onChangeText={txt => setNoteDesc(txt)}
           />
-          {/* <Text style={styles.AddnotecardText}>fgyhujik</Text> */}
+
           <TouchableOpacity
             style={styles.AddNoteButton}
-            // onPress={() => {
-            //   if (validate()) {
-            //     register();
-            //   }
-            // }}
-          >
-            <Text style={styles.AddNoteButtonText}>Sign Up</Text>
+            onPress={() => {
+              AddNote();
+              hideModalAdd(); // Call hideModalAdd as a function
+            }}>
+            <Text style={styles.AddNoteButtonText}>Save Note</Text>
           </TouchableOpacity>
         </ScrollView>
       </Modal>
