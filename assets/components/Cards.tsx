@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import {TextInput as RNTextInput} from 'react-native';
 import {
   Modal,
   Portal,
@@ -246,11 +247,34 @@ function Cards({userId}: any) {
         </TouchableOpacity>
 
         <ScrollView style={styles.AddNoteScrollView}>
-          <Text style={styles.AddnotecardTitle}>fghjk</Text>
-          <Text style={styles.AddnotecardText}>fgyhujik</Text>
+          {/* <Text style={styles.AddnotecardTitle}>fghjk</Text> */}
+          {/* <TextInput
+            value={email}
+            onChangeText={txt => setEmail(txt)}
+            placeholder="Email"
+            style={styles.input}
+            keyboardType="email-address"
+          /> */}
+          <RNTextInput placeholder="Title" style={styles.AddnotecardTitle} />
+          <RNTextInput
+            placeholder="Description"
+            style={styles.AddnotecardText}
+            multiline={true}
+          />
+          {/* <Text style={styles.AddnotecardText}>fgyhujik</Text> */}
+          <TouchableOpacity
+            style={styles.AddNoteButton}
+            // onPress={() => {
+            //   if (validate()) {
+            //     register();
+            //   }
+            // }}
+          >
+            <Text style={styles.AddNoteButtonText}>Sign Up</Text>
+          </TouchableOpacity>
         </ScrollView>
       </Modal>
-     
+
       <FAB.Group
         // fabStyle={styles.fab}
         theme={{colors: {background: 'rgba(33, 33, 33, 0.06)'}}}
@@ -342,7 +366,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
     padding: 20,
-    height: '80%', // Adjusted height for better visibility of the ScrollView
+    height: '60%', // Adjusted height for better visibility of the ScrollView
     margin: 20,
     borderRadius: 15,
     shadowColor: '#000',
@@ -365,10 +389,35 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 25,
     marginBottom: 10,
+    borderBottomWidth: 1, // Add this line to create an underline effect
+    borderColor: 'gray',
+    paddingVertical: 8,
+
+    padding: 5,
   },
   AddnotecardText: {
+    marginTop: 10,
     color: 'black',
     marginBottom: 15,
+    borderBottomWidth: 1, // Add this line to create an underline effect
+    borderColor: 'gray',
+    paddingVertical: 8,
+
+    padding: 5,
+    height: 150, // Set the height according to your design
+    textAlignVertical: 'top',
+  },
+  AddNoteButton: {
+    backgroundColor: '#637A9F',
+    borderRadius: 25,
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  AddNoteButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 export default Cards;
