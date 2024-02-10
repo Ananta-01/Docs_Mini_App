@@ -18,6 +18,7 @@ import {
   Button,
   TextInput,
   FAB,
+  Snackbar,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Loader} from './Loader';
@@ -26,6 +27,11 @@ function Cards({userId}: any) {
   const [state, setState] = React.useState({open: false});
 
   const onStateChange = ({open}: any) => setState({open});
+  const [visibleSnackBar, setVisibleSnackBar] = React.useState(false);
+
+  const onToggleSnackBar = () => setVisibleSnackBar(!visibleSnackBar);
+
+  const onDismissSnackBar = () => setVisibleSnackBar(false);
 
   const {open} = state;
   const [selectedNoteId, setSelectedNoteId] = useState(false);
@@ -171,16 +177,24 @@ function Cards({userId}: any) {
     }
   };
   const handleLongPress = async (noteId: any) => {
+    setSelectedNoteId(true);
+
     try {
       const res = await fetch(
-        `https://docs-mini-app-server.onrender.com/api/notes/deleteNote/r${noteId}`,
+        `https://docs-mini-app-server.onrender.com/api/notes/deleteNote/${noteId}`,
         {
           method: 'DELETE',
         },
       );
       if (res.ok) {
+        setSelectedNoteId(false);
         const data = await res.json();
+        onToggleSnackBar();
         console.log('Note deleted successfully ::::', data);
+        getNotes();
+        setTimeout(() => {
+          onDismissSnackBar();
+          }, 4000);
       } else {
         const errorData = await res.json();
         console.error('Error deleting note:', errorData);
@@ -197,7 +211,7 @@ function Cards({userId}: any) {
     }
     console.log('Long Pressed on Note ID:', noteId);
     // If you want to mark the note as selected, pass the noteId
-    setSelectedNoteId(true);
+   
   };
   const containerStyle = {backgroundColor: 'white', padding: 20};
   return (
@@ -399,6 +413,17 @@ function Cards({userId}: any) {
           }
         }}
       />
+       <Snackbar
+        visible={visibleSnackBar}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'No Worries',
+          onPress: () => {
+            // Do something
+          },
+        }}>
+        Your note deleted successfully!
+      </Snackbar>
       <Loader visible={loading} />
     </View>
   );
