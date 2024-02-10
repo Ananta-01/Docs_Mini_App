@@ -28,7 +28,7 @@ function Cards({userId}: any) {
   const onStateChange = ({open}: any) => setState({open});
 
   const {open} = state;
-
+  const [selectedNoteId, setSelectedNoteId] = useState(false);
   const [visible, setVisible] = React.useState(false);
   const [visibleAdd, setVisibleAdd] = React.useState(false);
 
@@ -170,7 +170,35 @@ function Cards({userId}: any) {
       }
     }
   };
-
+  const handleLongPress = async (noteId: any) => {
+    try {
+      const res = await fetch(
+        `https://docs-mini-app-server.onrender.com/api/notes/deleteNote/r${noteId}`,
+        {
+          method: 'DELETE',
+        },
+      );
+      if (res.ok) {
+        const data = await res.json();
+        console.log('Note deleted successfully ::::', data);
+      } else {
+        const errorData = await res.json();
+        console.error('Error deleting note:', errorData);
+      }
+    } catch (error: any) {
+      if (error.message.includes('Unauthorized')) {
+        Alert.alert(
+          'Authentication Failed',
+          'Invalid credentials. Please try again.',
+        );
+      } else {
+        console.error('Error:', error);
+      }
+    }
+    console.log('Long Pressed on Note ID:', noteId);
+    // If you want to mark the note as selected, pass the noteId
+    setSelectedNoteId(true);
+  };
   const containerStyle = {backgroundColor: 'white', padding: 20};
   return (
     <View
@@ -210,7 +238,8 @@ function Cards({userId}: any) {
               }}>
               <TouchableOpacity
                 style={{margin: 8}}
-                onPress={() => showModal(noteData)}>
+                onPress={() => showModal(noteData)}
+                onLongPress={() => handleLongPress(noteData._id)}>
                 <Icon size={24} color="white" name="file-alt" />
                 <Text variant="titleMedium" style={{color: 'white'}}>
                   {noteData.title}
@@ -326,6 +355,23 @@ function Cards({userId}: any) {
           </TouchableOpacity>
         </ScrollView>
       </Modal>
+      {selectedNoteId ? (
+        <TouchableOpacity
+          style={{
+            alignItems: 'center',
+            marginBottom: 15,
+            backgroundColor: 'rgb(205,92,92)',
+            justifyContent: 'center',
+            marginHorizontal: 165,
+            width: 50,
+            padding: 10,
+            borderRadius: 15,
+          }}>
+          <Icon size={20} color="white" name="trash" />
+        </TouchableOpacity>
+      ) : (
+        ''
+      )}
 
       <FAB.Group
         // fabStyle={styles.fab}
