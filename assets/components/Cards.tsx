@@ -175,101 +175,105 @@ function Cards({userId}: any) {
   return (
     <View
       style={{
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        // height: 780,
+        height: 780,
+        flex: 1,
       }}>
-      {noteData?.map((noteData: any, i: any) => (
-        <Animated.View
-          key={noteData._id}
-          style={[
-            {
-              transform: [
-                {translateX: panValues.current[i].x},
-                {translateY: panValues.current[i].y},
-              ],
-            },
-          ]}
-          {...createPanResponder(i).panHandlers}>
-          <View
-            ref={cardRefs.current[i]}
-            style={{
-              marginTop: cardGap,
-              marginLeft: i % 2 !== 0 ? cardGap : 0,
-              width: cardWidth,
-              height: 150,
-              backgroundColor: 'rgba(0, 0, 0, 0.4);',
-              borderRadius: 16,
-              shadowOpacity: 0.2,
-              position: 'relative',
-            }}>
-            <TouchableOpacity
-              style={{margin: 8}}
-              onPress={() => showModal(noteData)}>
-              <Icon size={24} color="white" name="file-alt" />
-              <Text variant="titleMedium" style={{color: 'white'}}>
-                {noteData.title}
-              </Text>
-              <Text variant="labelSmall" style={{color: 'white'}}>
-                {noteData.description}
-              </Text>
-              <Portal>
-                <Modal
-                  visible={visible}
-                  onDismiss={hideModaleditInput}
-                  contentContainerStyle={styles.containerStyle}>
-                  {selectedCardData && (
-                    <>
-                      <TouchableOpacity
-                        onPress={hideModaleditInput}
-                        style={styles.editIcon}>
-                        <Icon size={24} color="black" name="times-circle" />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => setEditInput(true)}
-                        style={styles.editIcon2}>
-                        <Icon size={24} color="black" name="edit" />
-                      </TouchableOpacity>
-                      {editInput ? (
-                        <ScrollView style={styles.scrollView}>
-                          <TextInput
-                            style={{marginTop: 10, marginBottom: 10}}
-                            label="Title"
-                            value={selectedCardData.title}
-                            mode="outlined"
-                          />
-                          <TextInput
-                            multiline
-                            numberOfLines={10}
-                            style={{marginTop: 10, marginBottom: 10}}
-                            label="description"
-                            value={selectedCardData.description}
-                            mode="outlined"
-                          />
-                          <TouchableOpacity style={styles.changesButton}>
-                            <Text style={styles.changesButtonText}>
-                              Save changes
+      <ScrollView
+        contentContainerStyle={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}>
+        {noteData?.map((noteData: any, i: any) => (
+          <Animated.View
+            key={noteData._id}
+            style={[
+              {
+                transform: [
+                  {translateX: panValues.current[i].x},
+                  {translateY: panValues.current[i].y},
+                ],
+              },
+            ]}
+            {...createPanResponder(i).panHandlers}>
+            <View
+              ref={cardRefs.current[i]}
+              style={{
+                marginTop: cardGap,
+                marginLeft: i % 2 !== 0 ? cardGap : 0,
+                width: cardWidth,
+                height: 150,
+                backgroundColor: 'rgba(0, 0, 0, 0.4);',
+                borderRadius: 16,
+                shadowOpacity: 0.2,
+                position: 'relative',
+              }}>
+              <TouchableOpacity
+                style={{margin: 8}}
+                onPress={() => showModal(noteData)}>
+                <Icon size={24} color="white" name="file-alt" />
+                <Text variant="titleMedium" style={{color: 'white'}}>
+                  {noteData.title}
+                </Text>
+                <Text variant="labelSmall" style={{color: 'white'}}>
+                  {noteData.description}
+                </Text>
+                <Portal>
+                  <Modal
+                    visible={visible}
+                    onDismiss={hideModaleditInput}
+                    contentContainerStyle={styles.containerStyle}>
+                    {selectedCardData && (
+                      <>
+                        <TouchableOpacity
+                          onPress={hideModaleditInput}
+                          style={styles.editIcon}>
+                          <Icon size={24} color="black" name="times-circle" />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => setEditInput(true)}
+                          style={styles.editIcon2}>
+                          <Icon size={24} color="black" name="edit" />
+                        </TouchableOpacity>
+                        {editInput ? (
+                          <ScrollView style={styles.scrollView}>
+                            <TextInput
+                              style={{marginTop: 10, marginBottom: 10}}
+                              label="Title"
+                              value={selectedCardData.title}
+                              mode="outlined"
+                            />
+                            <TextInput
+                              multiline
+                              numberOfLines={10}
+                              style={{marginTop: 10, marginBottom: 10}}
+                              label="description"
+                              value={selectedCardData.description}
+                              mode="outlined"
+                            />
+                            <TouchableOpacity style={styles.changesButton}>
+                              <Text style={styles.changesButtonText}>
+                                Save changes
+                              </Text>
+                            </TouchableOpacity>
+                          </ScrollView>
+                        ) : (
+                          <ScrollView style={styles.scrollView}>
+                            <Text style={styles.cardTitle}>
+                              {selectedCardData.title}
                             </Text>
-                          </TouchableOpacity>
-                        </ScrollView>
-                      ) : (
-                        <ScrollView style={styles.scrollView}>
-                          <Text style={styles.cardTitle}>
-                            {selectedCardData.title}
-                          </Text>
-                          <Text style={styles.cardText}>
-                            {selectedCardData.description}
-                          </Text>
-                        </ScrollView>
-                      )}
-                    </>
-                  )}
-                </Modal>
-              </Portal>
-            </TouchableOpacity>
+                            <Text style={styles.cardText}>
+                              {selectedCardData.description}
+                            </Text>
+                          </ScrollView>
+                        )}
+                      </>
+                    )}
+                  </Modal>
+                </Portal>
+              </TouchableOpacity>
 
-            {/* {subject.footer ? (
+              {/* {subject.footer ? (
               <View
                 style={{
                   position: 'absolute',
@@ -286,9 +290,11 @@ function Cards({userId}: any) {
             ) : (
               ''
             )} */}
-          </View>
-        </Animated.View>
-      ))}
+            </View>
+          </Animated.View>
+        ))}
+      </ScrollView>
+
       <Modal
         visible={visibleAdd}
         onDismiss={hideModalAdd}
