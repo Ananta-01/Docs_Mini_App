@@ -258,8 +258,9 @@ function Cards({userId}: any) {
                 <Text variant="titleMedium" style={{color: 'white'}}>
                   {noteData.title}
                 </Text>
-                <Text variant="labelSmall" style={{color: 'white'}}>
-                  {noteData.description}
+                <Text variant="labelSmall"  style={{color: 'white'}}>
+                  
+                  {noteData.description.slice(0, 50)}
                 </Text>
                 <Portal>
                   <Modal
