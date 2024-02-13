@@ -50,13 +50,13 @@ function Cards({userId}: any) {
   const showModal = (data: any) => {
     setSelectedCardData(data);
     setVisible(true);
-    // setVisibleAdd(true);
+    
   };
 
   const hideModal = () => {
     setSelectedCardData(null);
     setVisible(false);
-    // setVisibleAdd(false);
+
   };
 
   function hideModaleditInput() {
@@ -147,7 +147,6 @@ function Cards({userId}: any) {
   };
   useEffect(() => {
     getNotes();
-    // AddNote();
   }, []);
 
   const getNotes = async () => {
@@ -194,7 +193,7 @@ function Cards({userId}: any) {
         getNotes();
         setTimeout(() => {
           onDismissSnackBar();
-          }, 4000);
+        }, 4000);
       } else {
         const errorData = await res.json();
         console.error('Error deleting note:', errorData);
@@ -211,7 +210,6 @@ function Cards({userId}: any) {
     }
     console.log('Long Pressed on Note ID:', noteId);
     // If you want to mark the note as selected, pass the noteId
-   
   };
   const containerStyle = {backgroundColor: 'white', padding: 20};
   return (
@@ -258,8 +256,7 @@ function Cards({userId}: any) {
                 <Text variant="titleMedium" style={{color: 'white'}}>
                   {noteData.title}
                 </Text>
-                <Text variant="labelSmall"  style={{color: 'white'}}>
-                  
+                <Text variant="labelSmall" style={{color: 'white'}}>
                   {noteData.description.slice(0, 50)}
                 </Text>
                 <Portal>
@@ -414,7 +411,7 @@ function Cards({userId}: any) {
           }
         }}
       />
-       <Snackbar
+      <Snackbar
         visible={visibleSnackBar}
         onDismiss={onDismissSnackBar}
         action={{
