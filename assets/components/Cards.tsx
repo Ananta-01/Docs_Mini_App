@@ -47,16 +47,21 @@ function Cards({userId}: any) {
 
   const showModalAdd = () => setVisibleAdd(true);
   const hideModalAdd = () => setVisibleAdd(false);
+
+  const [updatenoteTitle, setUpdatenoteTitle] = useState<string>();
+  const [updatenoteDesc, setUpdatenoteDesc] = useState<string>();
+
   const showModal = (data: any) => {
     setSelectedCardData(data);
     setVisible(true);
-    
+    setUpdatenoteTitle(data.title);
+    setUpdatenoteDesc(data.description);
+    setEditInput(false); // Set to false initially
   };
 
   const hideModal = () => {
     setSelectedCardData(null);
     setVisible(false);
-
   };
 
   function hideModaleditInput() {
@@ -211,7 +216,87 @@ function Cards({userId}: any) {
     console.log('Long Pressed on Note ID:', noteId);
     // If you want to mark the note as selected, pass the noteId
   };
+  const updatenote = async () => {
+    setLoading(true);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer actual_token_value_here');
+
+    const body = {
+      title: updatenoteTitle,
+      description: updatenoteDesc,
+      postedBy: `${userId}`,
+    };
+
+    try {
+      const res = await fetch(
+        `https://docs-mini-app-server.onrender.com/api/notes/updateNote/${selectedCardData._id}`,
+        {
+          headers: headers,
+          method: 'PUT',
+          body: JSON.stringify(body),
+        },
+      );
+
+      // Continue with parsing the response
+      const data = await res.json();
+      setLoading(false);
+
+      console.log('Updated Data:', data);
+      hideModaleditInput();
+      getNotes();
+    } catch (error: any) {
+      if (error.message.includes('Unauthorized')) {
+        Alert.alert(
+          'Authentication Failed',
+          'Invalid credentials. Please try again.',
+        );
+      } else {
+        console.error('Error:', error);
+      }
+    }
+  };
   const containerStyle = {backgroundColor: 'white', padding: 20};
+  const EditNoteContent = () => (
+    <ScrollView style={styles.scrollView}>
+      <TextInput
+        style={{marginTop: 10, marginBottom: 10}}
+        label="Title"
+        value={updatenoteTitle}
+        onChangeText={text => setUpdatenoteTitle(text)}
+        mode="outlined"
+      />
+      <TextInput
+        multiline
+        numberOfLines={10}
+        style={{marginTop: 10, marginBottom: 10}}
+        label="Description"
+        value={updatenoteDesc}
+        onChangeText={text => setUpdatenoteDesc(text)}
+        mode="outlined"
+      />
+      <TouchableOpacity
+        style={styles.changesButton}
+        onPress={updatenote}>
+        <Text style={styles.changesButtonText}>Save changes</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+  
+  const ViewNoteContent = () => (
+    <ScrollView style={styles.scrollView}>
+      <Text style={styles.cardTitle}>{updatenoteTitle}</Text>
+      <Text style={styles.cardText}>{updatenoteDesc}</Text>
+    </ScrollView>
+  );
+
+  const toggleEditInput = () => setEditInput(prevState => !prevState);
+
+const hideModalEditInput = () => {
+  setSelectedCardData(null);
+  setVisible(false);
+  setEditInput(false);
+};
   return (
     <View
       style={{
@@ -267,47 +352,16 @@ function Cards({userId}: any) {
                     {selectedCardData && (
                       <>
                         <TouchableOpacity
-                          onPress={hideModaleditInput}
+                          onPress={hideModalEditInput}
                           style={styles.editIcon}>
                           <Icon size={24} color="black" name="times-circle" />
                         </TouchableOpacity>
                         <TouchableOpacity
-                          onPress={() => setEditInput(true)}
+                          onPress={toggleEditInput}
                           style={styles.editIcon2}>
                           <Icon size={24} color="black" name="edit" />
                         </TouchableOpacity>
-                        {editInput ? (
-                          <ScrollView style={styles.scrollView}>
-                            <TextInput
-                              style={{marginTop: 10, marginBottom: 10}}
-                              label="Title"
-                              value={selectedCardData.title}
-                              mode="outlined"
-                            />
-                            <TextInput
-                              multiline
-                              numberOfLines={10}
-                              style={{marginTop: 10, marginBottom: 10}}
-                              label="description"
-                              value={selectedCardData.description}
-                              mode="outlined"
-                            />
-                            <TouchableOpacity style={styles.changesButton}>
-                              <Text style={styles.changesButtonText}>
-                                Save changes
-                              </Text>
-                            </TouchableOpacity>
-                          </ScrollView>
-                        ) : (
-                          <ScrollView style={styles.scrollView}>
-                            <Text style={styles.cardTitle}>
-                              {selectedCardData.title}
-                            </Text>
-                            <Text style={styles.cardText}>
-                              {selectedCardData.description}
-                            </Text>
-                          </ScrollView>
-                        )}
+                        {editInput ? <EditNoteContent /> : <ViewNoteContent />}
                       </>
                     )}
                   </Modal>
