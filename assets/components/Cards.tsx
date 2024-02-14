@@ -227,7 +227,7 @@ function Cards({userId}: any) {
       description: updatenoteDesc,
       postedBy: `${userId}`,
     };
-
+    // console.log(updatenoteTitle,updatenoteDesc)
     try {
       const res = await fetch(
         `https://docs-mini-app-server.onrender.com/api/notes/updateNote/${selectedCardData._id}`,
@@ -256,39 +256,34 @@ function Cards({userId}: any) {
       }
     }
   };
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+  // const containerStyle = {backgroundColor: 'white', padding: 20};
   const EditNoteContent = () => (
     <ScrollView style={styles.scrollView}>
       <TextInput
-      autoCorrect={false}
-     
-      style={{marginTop: 10, marginBottom: 10}}
-      label="Title"
-      value={updatenoteTitle}
-      onChangeText={text => setUpdatenoteTitle(text)}
-     
-      mode="outlined"
-    />
-    <TextInput
-      multiline
-      numberOfLines={10}
-      style={{marginTop: 10, marginBottom: 10}}
-      label="Description"
-      value={updatenoteDesc}
-      onChangeText={text => {
-        console.log('Description:', text);
-        setUpdatenoteDesc(text);
-      }}
-      mode="outlined"
-    />
-      <TouchableOpacity
-        style={styles.changesButton}
-        onPress={updatenote}>
+        autoCorrect={false}
+        style={{marginTop: 10, marginBottom: 10}}
+        label="Title"
+        value={updatenoteTitle}
+        onChangeText={text => setUpdatenoteTitle(text)}
+        mode="outlined"
+      />
+      <TextInput
+        multiline
+        numberOfLines={10}
+        style={{marginTop: 10, marginBottom: 10}}
+        label="Description"
+        value={updatenoteDesc}
+        onChangeText={text => {
+          setUpdatenoteDesc(text);
+        }}
+        mode="outlined"
+      />
+      <TouchableOpacity style={styles.changesButton} onPress={updatenote}>
         <Text style={styles.changesButtonText}>Save changes</Text>
       </TouchableOpacity>
     </ScrollView>
   );
-  
+
   const ViewNoteContent = () => (
     <ScrollView style={styles.scrollView}>
       <Text style={styles.cardTitle}>{updatenoteTitle}</Text>
@@ -298,11 +293,11 @@ function Cards({userId}: any) {
 
   const toggleEditInput = () => setEditInput(prevState => !prevState);
 
-const hideModalEditInput = () => {
-  setSelectedCardData(null);
-  setVisible(false);
-  setEditInput(false);
-};
+  const hideModalEditInput = () => {
+    setSelectedCardData(null);
+    setVisible(false);
+    setEditInput(false);
+  };
   return (
     <View
       style={{
